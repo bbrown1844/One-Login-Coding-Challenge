@@ -1,6 +1,5 @@
 import math
 import sys
-#TODO: divide by zero error
 
 class Solution:
   def reduction(self, finalVal: str) -> str:

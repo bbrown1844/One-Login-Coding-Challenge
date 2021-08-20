@@ -126,7 +126,7 @@ class Solution:
     
     if frac2 == "0":
       print("Error: divide by zero")
-      return
+      return "0"
     
     firstHalf = frac1.split("/")
     secondHalf = frac2.split("/")
@@ -191,6 +191,11 @@ testCases = {
   "1/2 + -1_1/2":"-1",
   "0 + 0":"0",
   "3/4 / 1/2 * 1_1/2":"2_1/4",
+  "1_3/4 / 1/3 + 4_1/2 - 3/8":"9_3/8",
+  "3/4 * 4/5 / 3/8 + -4/5 / 1_3/4":"1_1/7",
+  "3/4 / 0":"0",
+  "0 / 2": "0",
+  "0 / -2": "0",
 }
 
 if __name__ == "__main__":

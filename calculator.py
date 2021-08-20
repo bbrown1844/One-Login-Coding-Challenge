@@ -1,16 +1,25 @@
 import math
-
+import sys
 #TODO: divide by zero error
 
 class Solution:
-  def reduction(self, finalVal):
+  def reduction(self, finalVal: str) -> str:
+    if finalVal == "0":
+      return "0"
+
+    negBoolReduc = False
     p = finalVal.split("/")
     num = int(p[0])
+    if num < 0:
+      negBoolReduc = True
+      num = abs(num)
     den = int(p[1])
 
     if num > den:
       remainder = num % den      
       wholeVal = int((num-remainder)/den)
+      if negBoolReduc:
+        wholeVal*=-1
       if remainder == 0:
         return str(wholeVal)
       return str(wholeVal)+"_"+str(remainder)+"/"+p[1]
@@ -19,14 +28,14 @@ class Solution:
     else:
       return finalVal
 
-  def gcd(self, a, b):
+  def gcd(self, a: int, b: int):
     if (a == 0):
       return b
     return self.gcd(b % a, a)
 
   def lowest(self, den3: str, num3: str) -> str:
-    common_factor = self.gcd(num3, den3)
-
+    common_factor = abs(self.gcd(num3, den3))
+    
     den3 = int(den3 / common_factor)
     num3 = int(num3 / common_factor)
 
@@ -42,8 +51,13 @@ class Solution:
 
     negBool = False
     if fNumber[0] == "-":
-      negBool = True 
-      fNumber = fNumber[1:]
+      #double negative so convert to positive 
+      if fNumber[1] == "-":
+        negBool = False 
+        fNumber = fNumber[2:]
+      else:
+        negBool = True 
+        fNumber = fNumber[1:]
 
     parseFrac = fNumber.strip().split("_")
     if len(parseFrac) == 2:
@@ -59,13 +73,14 @@ class Solution:
     else:
       improperReturn = str(whole * int(fracParse[1]) + int(fracParse[0])) + "/" + fracParse[1]
     
+    #number is negative 
     if negBool:
       return "-"+improperReturn
     else:
       return improperReturn
 
   # Function to add two fractions
-  def addFraction(self, frac1, frac2):
+  def addFraction(self, frac1: str, frac2: str) -> str:
     if frac1 == "0":
       return frac2
     
@@ -84,10 +99,10 @@ class Solution:
     den3 = (den1 * den2) / den3
 
     num3 = ((num1) * (den3 / den1) + (num2) * (den3 / den2))
-
     return self.lowest(den3, num3)
-  
-  def multiplyFraction(self, frac1, frac2):
+
+  # Function to multiply two fractions
+  def multiplyFraction(self, frac1: str, frac2: str) -> str:
     if frac1 == "0" or frac2 == "0":
       return "0"
     
@@ -104,9 +119,29 @@ class Solution:
 
     return self.lowest(den3, num3)
 
-  def parseExpression(self, expression):
-    pass
-  
+  # Function to divide two fractions
+  def divideFraction(self, frac1: str, frac2: str) -> str:
+    if frac1 == "0":
+      return "0"
+    
+    if frac2 == "0":
+      print("Error: divide by zero")
+      return
+    
+    firstHalf = frac1.split("/")
+    secondHalf = frac2.split("/")
+
+    num1 = int(firstHalf[0].strip())
+    den1 = int(firstHalf[1].strip())
+    num2 = int(secondHalf[0].strip())
+    den2 = int(secondHalf[1].strip())
+
+    num3 = num1 * den2
+    den3 = den1 * num2 
+
+    return self.lowest(den3, num3)
+
+  # Functin that parses expression given and returns the result  
   def calculate(self, s: str) -> int:   
     inner, outer, result, opt = "", "0", "0", '+'
     s+='+'
@@ -118,35 +153,61 @@ class Solution:
       if s[c] == '/' and s[c-1].isdigit():
         inner+=s[c]
         continue
+      if s[c] == '-' and s[c+1].isdigit():
+        inner+=s[c]
+        continue
       if opt == '+':
         result = self.addFraction(self.convert_to_improper(result), self.convert_to_improper(outer))
         outer = inner
       elif opt == '-':
         result = self.addFraction(self.convert_to_improper(result), self.convert_to_improper(outer))
-        # result += outer
         outer = "-"+inner
       elif opt == '*':
         outer = self.multiplyFraction(self.convert_to_improper(outer), self.convert_to_improper(inner))
-        # print(outer)
       elif opt == '/':
-        outer = int(outer / inner)
+        outer = self.divideFraction(self.convert_to_improper(outer), self.convert_to_improper(inner))
+        # outer = int(outer / inner)
       inner, opt = "", s[c]
+      # print("last ",self.convert_to_improper(result), self.convert_to_improper(outer))
     return self.reduction(self.addFraction(self.convert_to_improper(result), self.convert_to_improper(outer)))
 
 
-
-tests = { 
+testCases = { 
   "1+2+3":"6", 
   "1/2+1/2":"1",
   "2_3/8 + 9/8":"3_1/2",
+  "-1 - 1":"-2",
+  "1 - 1":"0",
+  "1 - -1":"2",
+  "1 + -1":"0",
+  "-1 + 1":"0",
+  "-1 + -1":"-2",
+  "-1 - -1":"0",
+  "1/2 + -1":"-1/2",
+  "-1 + 1/2":"-1/2",
+  "-1/2 - 1/2":"-1",
+  "-1/2 - -1/2":"0",
+  "-1_1/2 + -1":"-2_1/2",
+  "1_1/2 + -1":"1/2",
+  "1_1/2 - -1":"2_1/2",
+  "1/2 + -1_1/2":"-1",
+  "0 + 0":"0",
 }
 
 if __name__ == "__main__":
+  pSize = len(sys.argv)
   calculator = Solution()
-  # for k,v in tests.items():
-  #   assert calculator.calculate(k) == v, k+" test failed"
-  while True:
-    val  = input("?")
-    print(calculator.calculate(val))
+
+  if pSize > 2:
+    print("Invalid program parameters")
+  elif pSize == 1:
+    while True:
+      val = input("?")
+      print(calculator.calculate(val))
+  else:
+    for k,v in testCases.items():
+      assert calculator.calculate(k) == v, k+" test failed"
+
+
 
 

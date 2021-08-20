@@ -28,7 +28,7 @@ class Solution:
     else:
       return finalVal
 
-  def gcd(self, a: int, b: int):
+  def gcd(self, a: int, b: int) -> int:
     if (a == 0):
       return b
     return self.gcd(b % a, a)
@@ -166,9 +166,7 @@ class Solution:
         outer = self.multiplyFraction(self.convert_to_improper(outer), self.convert_to_improper(inner))
       elif opt == '/':
         outer = self.divideFraction(self.convert_to_improper(outer), self.convert_to_improper(inner))
-        # outer = int(outer / inner)
       inner, opt = "", s[c]
-      # print("last ",self.convert_to_improper(result), self.convert_to_improper(outer))
     return self.reduction(self.addFraction(self.convert_to_improper(result), self.convert_to_improper(outer)))
 
 
@@ -192,6 +190,7 @@ testCases = {
   "1_1/2 - -1":"2_1/2",
   "1/2 + -1_1/2":"-1",
   "0 + 0":"0",
+  "3/4 / 1/2 * 1_1/2":"2_1/4",
 }
 
 if __name__ == "__main__":

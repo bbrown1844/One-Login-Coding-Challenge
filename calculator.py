@@ -2,6 +2,7 @@ import math
 import sys
 
 class Solution:
+  # function to reduce fraction into proper formatted form for end output 
   def reduction(self, finalVal: str) -> str:
     if finalVal == "0":
       return "0"
@@ -27,11 +28,13 @@ class Solution:
     else:
       return finalVal
 
+  # function to find the gcd of two integers 
   def gcd(self, a: int, b: int) -> int:
     if (a == 0):
       return b
     return self.gcd(b % a, a)
 
+  # function to reduce fractions to lowest form but keeps fraction as improper
   def lowest(self, den3: str, num3: str) -> str:
     common_factor = abs(self.gcd(num3, den3))
     
@@ -78,7 +81,7 @@ class Solution:
     else:
       return improperReturn
 
-  # Function to add two fractions
+  # function to add two fractions
   def addFraction(self, frac1: str, frac2: str) -> str:
     if frac1 == "0":
       return frac2
@@ -100,7 +103,7 @@ class Solution:
     num3 = ((num1) * (den3 / den1) + (num2) * (den3 / den2))
     return self.lowest(den3, num3)
 
-  # Function to multiply two fractions
+  # function to multiply two fractions
   def multiplyFraction(self, frac1: str, frac2: str) -> str:
     if frac1 == "0" or frac2 == "0":
       return "0"
@@ -118,7 +121,7 @@ class Solution:
 
     return self.lowest(den3, num3)
 
-  # Function to divide two fractions
+  # function to divide two fractions
   def divideFraction(self, frac1: str, frac2: str) -> str:
     if frac1 == "0":
       return "0"
@@ -140,7 +143,7 @@ class Solution:
 
     return self.lowest(den3, num3)
 
-  # Functin that parses expression given and returns the result  
+  # functin that parses expression given and returns the result  
   def calculate(self, s: str) -> int:   
     inner, outer, result, opt = "", "0", "0", '+'
     s+='+'

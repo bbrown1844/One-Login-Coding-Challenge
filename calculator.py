@@ -7,6 +7,9 @@ class Solution:
     #0 is already final reduced form
     if finalVal == "0":
       return "= 0"
+    
+    elif finalVal == "0/0":
+      return "= undefined"
 
     negBoolReduc = False
     p = finalVal.split("/")
@@ -156,6 +159,8 @@ class Solution:
   # function to divide two fractions
   def divideFraction(self, frac1: str, frac2: str) -> str:
     if frac1 == "0":
+      if frac2 == "0":
+        print("undefined")
       return "0"
     
     if frac2 == "0":
@@ -210,8 +215,10 @@ class Solution:
     return self.reduction(self.addFraction(self.convert_to_improper(result), self.convert_to_improper(outer)))
 
 
+#note: first two test cases should also output an error
 testCases = { 
-  # "3/4 / 0":"= 0",
+  "3/4 / 0":"= 0",
+  "0 / 0":"= 0",
   "1+2+3+4+5+7":"= 22",
   "2+ -3 + 5 - 2 / 8 * 3/4":"= 3_13/16",
   "1+2+3":"= 6", 
